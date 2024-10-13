@@ -1,0 +1,146 @@
+From 330032c9bb8dc6f575050fbac90e90f003552224 Mon Sep 17 00:00:00 2001
+From: KkemChen <kkemchen@qq.com>
+Date: Sun, 13 Oct 2024 22:19:58 +0800
+Subject: [PATCH] Modified CMakeLists.txt for xmake
+
+---
+ bmf/engine/c_engine/CMakeLists.txt  | 5 +++--
+ bmf/hml/perf/CMakeLists.txt         | 3 ++-
+ bmf/hml/src/CMakeLists.txt          | 2 +-
+ bmf/hml/src/tests/CMakeLists.txt    | 4 ++--
+ bmf/sdk/CMakeLists.txt              | 5 +++--
+ bmf/test/cpp_builder/CMakeLists.txt | 5 +++--
+ cmake/dependencies.cmake            | 2 +-
+ 7 files changed, 15 insertions(+), 11 deletions(-)
+
+diff --git a/bmf/engine/c_engine/CMakeLists.txt b/bmf/engine/c_engine/CMakeLists.txt
+index 38b3668..c52839e 100644
+--- a/bmf/engine/c_engine/CMakeLists.txt
++++ b/bmf/engine/c_engine/CMakeLists.txt
+@@ -62,14 +62,15 @@ if(BMF_ENABLE_TEST)
+ 
+     add_executable(test_bmf_engine ${TEST_SRCS})
+ 
++    find_package(GTest REQUIRED)
+     target_link_libraries(test_bmf_engine
+         PRIVATE
+             ${BMF_FFMPEG_TARGETS}
+             bmf_module_sdk engine
+-            gtest
++            GTest::gtest
+     )
+ 
+-    target_link_libraries(test_bmf_engine PRIVATE gtest_main)
++    target_link_libraries(test_bmf_engine PRIVATE GTest::gtest_main)
+ 
+     if ($ENV{SCRIPT_EXEC_MODE} MATCHES "osx")
+         # Mac platform
+diff --git a/bmf/hml/perf/CMakeLists.txt b/bmf/hml/perf/CMakeLists.txt
+index 79bc63b..af730c2 100644
+--- a/bmf/hml/perf/CMakeLists.txt
++++ b/bmf/hml/perf/CMakeLists.txt
+@@ -3,9 +3,10 @@ file(GLOB PERF_SRCS *.cpp)
+ 
+ add_executable(hmp_perf_main ${PERF_SRCS})
+ 
++find_package(benchmark REQUIRED)
+ target_link_libraries(hmp_perf_main 
+     PRIVATE
+-        hmp benchmark benchmark_main)
++        hmp benchmark::benchmark benchmark::benchmark_main)
+ 
+ if(HMP_ENABLE_OPENCV)
+     target_link_libraries(hmp_perf_main 
+diff --git a/bmf/hml/src/CMakeLists.txt b/bmf/hml/src/CMakeLists.txt
+index 81bd053..24a09e0 100644
+--- a/bmf/hml/src/CMakeLists.txt
++++ b/bmf/hml/src/CMakeLists.txt
+@@ -140,4 +140,4 @@ if(NOT "${CMAKE_SYSTEM_NAME}" MATCHES "Android|iOS|Darwin")
+     )
+ endif()
+ 
+-add_subdirectory(tests)
++## add_subdirectory(tests)
+diff --git a/bmf/hml/src/tests/CMakeLists.txt b/bmf/hml/src/tests/CMakeLists.txt
+index e84b86f..96e8df0 100644
+--- a/bmf/hml/src/tests/CMakeLists.txt
++++ b/bmf/hml/src/tests/CMakeLists.txt
+@@ -14,8 +14,8 @@ if(HMP_ENABLE_CUDA)
+ endif()
+ 
+ add_executable(test_hmp ${TEST_SRCS})
+-
+-target_link_libraries(test_hmp PRIVATE gtest gtest_main hmp)
++find_package(GTest REQUIRED)
++target_link_libraries(test_hmp PRIVATE GTest::gtest GTest::gtest_main hmp)
+ 
+ if(HMP_ENABLE_FFMPEG)
+     target_link_libraries(test_hmp PRIVATE ffmpeg::avcodec ffmpeg::avutil )
+diff --git a/bmf/sdk/CMakeLists.txt b/bmf/sdk/CMakeLists.txt
+index f2aff2d..671469a 100644
+--- a/bmf/sdk/CMakeLists.txt
++++ b/bmf/sdk/CMakeLists.txt
+@@ -94,10 +94,11 @@ if(BMF_ENABLE_TEST)
+     file(GLOB TEST_SRCS cpp_sdk/test/*.cpp)
+     add_executable(test_bmf_module_sdk ${TEST_SRCS})
+ 
++    find_package(GTest REQUIRED)
+     target_link_libraries(test_bmf_module_sdk
+         PRIVATE
+             ${BMF_FFMPEG_TARGETS} bmf_module_sdk
+-            gtest
++            GTest::gtest
+     )
+ 
+     if(HMP_ENABLE_OPENCV)
+@@ -119,7 +120,7 @@ if(BMF_ENABLE_TEST)
+                 PRIVATE ${TORCH_LIBRARIES})
+     endif()
+ 
+-    target_link_libraries(test_bmf_module_sdk PRIVATE gtest_main)
++    target_link_libraries(test_bmf_module_sdk PRIVATE GTest::gtest_main)
+ 
+     if ($ENV{SCRIPT_EXEC_MODE} MATCHES "osx")
+         # Mac platform
+diff --git a/bmf/test/cpp_builder/CMakeLists.txt b/bmf/test/cpp_builder/CMakeLists.txt
+index 5c09c34..f1f6fb0 100644
+--- a/bmf/test/cpp_builder/CMakeLists.txt
++++ b/bmf/test/cpp_builder/CMakeLists.txt
+@@ -3,10 +3,11 @@ file(GLOB SRCS *.cpp *.h)
+ 
+ add_executable(test_cpp_builder ${SRCS})
+ 
++find_package(GTest REQUIRED)
+ target_link_libraries(test_cpp_builder
+     PRIVATE 
+         bmf_module_sdk engine nlohmann 
+-        gtest
++        GTest::gtest
+ )
+ 
+ if(WIN32)
+@@ -22,7 +23,7 @@ else()
+     )
+ endif()
+ 
+-target_link_libraries(test_cpp_builder PRIVATE gtest_main)
++target_link_libraries(test_cpp_builder PRIVATE GTest::gtest_main)
+ 
+ install(TARGETS test_cpp_builder
+     RUNTIME DESTINATION bin
+diff --git a/cmake/dependencies.cmake b/cmake/dependencies.cmake
+index b57cbc3..ea09e15 100644
+--- a/cmake/dependencies.cmake
++++ b/cmake/dependencies.cmake
+@@ -14,7 +14,7 @@ if(BMF_ENABLE_PYTHON)
+     endif()
+ endif()
+ 
+-if (NOT BMF_LOCAL_DEPENDENCIES)
++if (NOT BMF_LOCAL_DEPENDENCIES AND BMF_ENABLE_PYTHON)
+     find_package(pybind11 REQUIRED)
+ endif()
+ 
+-- 
+2.34.1
+
