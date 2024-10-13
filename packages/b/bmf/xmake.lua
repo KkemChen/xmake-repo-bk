@@ -9,7 +9,7 @@ package("bmf")
     add_versions("v1.0.0", "1a721116761683bac5d2ff72a098a594c37413625874301765ce294252c7d2fd")
     -- set_sourcedir(path.join(os.scriptdir(), "bmf"))
     -- add_patches("latest", path.join(os.scriptdir(), "patches", "0001-Modified-CMakeLists.txt-for-xmake.patch"), "d2c1a10a4a3dd65c227db490bfee138e329394877cd1b3ce26d3dd947611a96b")
-    add_patches("v1.0.0", path.join(os.scriptdir(), "patches", "0001-Modified-CMakeLists.txt-for-xmake.patch"), "d2c1a10a4a3dd65c227db490bfee138e329394877cd1b3ce26d3dd947611a96b")
+    add_patches("v1.0.0", path.join(os.scriptdir(), "patches", "0001-Modified-CMakeLists.txt-for-xmake.patch"), "259bd41c5083ab303403829e47730a615cdf79da9eb81c1339a423169177b31f")
 
     add_configs("breakpad", {description = "Enable build with breakpad support", default = false, type = "boolean"})
     add_configs("cuda", {description = "Enable CUDA support", default = false, type = "boolean"})

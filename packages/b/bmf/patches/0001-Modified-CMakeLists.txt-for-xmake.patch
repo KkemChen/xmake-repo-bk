@@ -1,17 +1,18 @@
-From 330032c9bb8dc6f575050fbac90e90f003552224 Mon Sep 17 00:00:00 2001
+From 8e379f0883cb8a51d08990d8b660a89520099900 Mon Sep 17 00:00:00 2001
 From: KkemChen <kkemchen@qq.com>
-Date: Sun, 13 Oct 2024 22:19:58 +0800
-Subject: [PATCH] Modified CMakeLists.txt for xmake
+Date: Sun, 13 Oct 2024 23:24:03 +0800
+Subject: [PATCH] Modified-CMakeLists.txt-for-xmake.
 
 ---
- bmf/engine/c_engine/CMakeLists.txt  | 5 +++--
- bmf/hml/perf/CMakeLists.txt         | 3 ++-
- bmf/hml/src/CMakeLists.txt          | 2 +-
- bmf/hml/src/tests/CMakeLists.txt    | 4 ++--
- bmf/sdk/CMakeLists.txt              | 5 +++--
- bmf/test/cpp_builder/CMakeLists.txt | 5 +++--
- cmake/dependencies.cmake            | 2 +-
- 7 files changed, 15 insertions(+), 11 deletions(-)
+ bmf/engine/c_engine/CMakeLists.txt  |  5 +++--
+ bmf/hml/perf/CMakeLists.txt         |  3 ++-
+ bmf/hml/src/CMakeLists.txt          |  2 +-
+ bmf/hml/src/tests/CMakeLists.txt    |  4 ++--
+ bmf/sdk/CMakeLists.txt              |  5 +++--
+ bmf/test/cpp_builder/CMakeLists.txt |  5 +++--
+ build.sh                            | 10 +++++-----
+ cmake/dependencies.cmake            |  2 +-
+ 8 files changed, 20 insertions(+), 16 deletions(-)
 
 diff --git a/bmf/engine/c_engine/CMakeLists.txt b/bmf/engine/c_engine/CMakeLists.txt
 index 38b3668..c52839e 100644
@@ -52,7 +53,7 @@ index 79bc63b..af730c2 100644
  if(HMP_ENABLE_OPENCV)
      target_link_libraries(hmp_perf_main 
 diff --git a/bmf/hml/src/CMakeLists.txt b/bmf/hml/src/CMakeLists.txt
-index 81bd053..24a09e0 100644
+index 81bd053..bbcf87d 100644
 --- a/bmf/hml/src/CMakeLists.txt
 +++ b/bmf/hml/src/CMakeLists.txt
 @@ -140,4 +140,4 @@ if(NOT "${CMAKE_SYSTEM_NAME}" MATCHES "Android|iOS|Darwin")
@@ -60,7 +61,7 @@ index 81bd053..24a09e0 100644
  endif()
  
 -add_subdirectory(tests)
-+## add_subdirectory(tests)
++# add_subdirectory(tests)
 diff --git a/bmf/hml/src/tests/CMakeLists.txt b/bmf/hml/src/tests/CMakeLists.txt
 index e84b86f..96e8df0 100644
 --- a/bmf/hml/src/tests/CMakeLists.txt
@@ -128,6 +129,28 @@ index 5c09c34..f1f6fb0 100644
  
  install(TARGETS test_cpp_builder
      RUNTIME DESTINATION bin
+diff --git a/build.sh b/build.sh
+index d9c220f..577ce6e 100755
+--- a/build.sh
++++ b/build.sh
+@@ -75,12 +75,12 @@ then
+   git submodule update --init --recursive
+ fi
+ 
+-(cd 3rd_party/dlpack && cmake . && make && make install)
++# (cd 3rd_party/dlpack && cmake . && make && make install)
+ 
+-if [ ! -d "3rd_party/breakpad" ]
+-then
+-    (cd 3rd_party/ && wget https://github.com/BabitMF/bmf/releases/download/files/breakpad.tar.xz && tar xvf breakpad.tar.xz)
+-fi
++# if [ ! -d "3rd_party/breakpad" ]
++# then
++#     (cd 3rd_party/ && wget https://github.com/BabitMF/bmf/releases/download/files/breakpad.tar.xz && tar xvf breakpad.tar.xz)
++# fi
+ 
+ # Generate BMF version
+ source ./version.sh
 diff --git a/cmake/dependencies.cmake b/cmake/dependencies.cmake
 index b57cbc3..ea09e15 100644
 --- a/cmake/dependencies.cmake
